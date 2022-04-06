@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1013957243579",
+    "project_id": "knowledge-hub-715ab",
+    "storage_bucket": "knowledge-hub-715ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013957243579:android:b961c9ca1d432cac172f9e",
+        "android_client_info": {
+          "package_name": "com.example.skein_community"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1013957243579-ghdp085pkbpgcmd6dpabse1t9avef834.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skein_community",
+            "certificate_hash": "b9de39186d2d704b62440292e702f118c87d10a7"
+          }
+        },
+        {
+          "client_id": "1013957243579-kbokou98upkh9sqg4q3qtgdf9nu7mtka.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA90xTiN3vkKkZicKZI98b_u5-SZjNw4xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1013957243579-kbokou98upkh9sqg4q3qtgdf9nu7mtka.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,4 @@
+Login Req - {"email":"email","password":"password"}
+Login Res - {"status":"true", "message":"Successfully Login","data":{"user_id":"bhkccbhk","role":"user","full_name":"test","email_id":"test@gmail.com","picture":"https://reqres.in/img/faces/3-image.jpg","mobile_no":"+910123456789"},"token":"123456789"}
+signUp Req- {"full_name":"","email_id":"","mobile_no":"","password":""}
+SignUp Res- {"status":"true", "message":"Successfully Login","data":{"user_id":"bhkccbhk","role":"user","full_name":"test","email_id":"test@gmail.com","picture":"https://reqres.in/img/faces/3-image.jpg","mobile_no":"+910123456789"},"token":"123456789"}
