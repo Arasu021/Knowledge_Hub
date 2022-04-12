@@ -5,7 +5,6 @@ class UpdateUserReq {
   String? interests;
   String? email;
   String? mobileNo;
-  String? fcmToken;
 
   UpdateUserReq(
       {this.fullName,
@@ -13,8 +12,7 @@ class UpdateUserReq {
       this.workExperience,
       this.interests,
       this.email,
-      this.mobileNo,
-      this.fcmToken});
+      this.mobileNo});
 
   UpdateUserReq.fromJson(Map<String, dynamic> json) {
     fullName = json['full_name'];
@@ -23,7 +21,6 @@ class UpdateUserReq {
     interests = json['interests'];
     email = json['email'];
     mobileNo = json['mobile_no'];
-    fcmToken = json['fcm_token'];
   }
 
   Map<String, dynamic> toJson() {
@@ -34,7 +31,6 @@ class UpdateUserReq {
     data['interests'] = this.interests;
     data['email'] = this.email;
     data['mobile_no'] = this.mobileNo;
-    data['fcm_token'] = this.fcmToken;
     return data;
   }
 }

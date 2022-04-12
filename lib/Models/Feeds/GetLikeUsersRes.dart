@@ -41,7 +41,7 @@ class GetFeedLikeData {
   String? email;
   String? mobileNo;
   String? profilePicture;
-  Null? fcmToken;
+  String? fcmToken;
 
   GetFeedLikeData(
       {this.feedLikeId,

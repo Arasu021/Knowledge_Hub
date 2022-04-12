@@ -1,7 +1,15 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_chips_input/flutter_chips_input.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:skein_community/Models/Feeds/PostFeedReq2.dart';
+import 'package:skein_community/Models/Questions/PostQuesReq.dart';
+import 'package:skein_community/Models/Questions/PostQuesReq2.dart';
+import 'package:skein_community/Screens/dashboard2.dart';
 import 'package:skein_community/Utilities/strings.dart';
 import 'package:skein_community/network/ApiService.dart';
 
@@ -13,12 +21,19 @@ class PostQues extends StatefulWidget {
 }
 
 class _PostQuesState extends State<PostQues> {
-  final TextEditingController feedController = TextEditingController();
+  final TextEditingController quesController = TextEditingController();
   final TextEditingController tagController = TextEditingController();
   BuildContext? ctx;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool? isLoading = false;
+  bool? _isLoading = false;
+
+  dynamic value1;
+
+  late File imageFile;
+  XFile? image;
+  final ImagePicker _picker = ImagePicker();
+  String img64 = "";
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +42,14 @@ class _PostQuesState extends State<PostQues> {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: Builder(builder: (BuildContext newContext) {
-            return QuesPostPage(newContext);
+            return feedpostPage(newContext);
           }),
         ));
   }
 
-  QuesPostPage(BuildContext context) {
+  feedpostPage(BuildContext context) {
     const mockResults = <AppProfile>[
+      AppProfile('Skenians'),
       AppProfile('Flutter'),
       AppProfile('Node Js'),
       AppProfile('Angular'),
@@ -68,18 +84,27 @@ class _PostQuesState extends State<PostQues> {
             leading: CircleAvatar(
               child: ClipOval(
                 child: Center(
-                  child: Image.network(
-                    "https://picsum.photos/seed/picsum/200/300",
-                    fit: BoxFit.cover,
-                    width: MediaQuery.of(context).size.width,
-                  ),
+                  child: (Strings.myprofile![0].profilePicture == "" ||
+                          Strings.myprofile![0].profilePicture == null ||
+                          Strings.myprofile![0].profilePicture == "undefined")
+                      ? Icon(
+                          Icons.person,
+                          color: Colors.grey.shade700,
+                          size: 25,
+                        )
+                      : Image.network(
+                          //"https://picsum.photos/seed/picsum/200/300",
+                          "https://demo.emeetify.com:3422/${Strings.myprofile![0].profilePicture}",
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width,
+                        ),
                 ),
               ),
               radius: 30,
               backgroundColor: Colors.grey.shade300,
             ),
-            title: Text("Arasuewaran R"),
-            subtitle: Text("flutter developer"),
+            title: Text(Strings.myprofile![0].fullName.toString()),
+            subtitle: Text(Strings.myprofile![0].designation.toString()),
             // trailing: SizedBox(
             //   width: 100,
             // )
@@ -89,8 +114,49 @@ class _PostQuesState extends State<PostQues> {
           key: _formKey,
           child: Column(
             children: [
+              (image != null)
+                  ? Stack(children: [
+                      Image.file(
+                        File(image!.path),
+                        width: 250,
+                        height: 190,
+                        fit: BoxFit.fitHeight,
+                      ),
+                      Positioned(
+                        top: 1,
+                        right: 1,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              image = null;
+                            });
+                          },
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [
+                                      Colors.yellow.shade700,
+                                      Colors.orange.shade600
+                                    ]),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            child: Icon(
+                              Icons.clear,
+                              size: 17,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ),
+                      )
+                    ])
+                  : Container(),
               Padding(
-                padding: EdgeInsets.fromLTRB(20, 50, 20, 4),
+                padding:
+                    EdgeInsets.fromLTRB(20, (image != null) ? 10 : 50, 20, 4),
                 child: TextFormField(
                   autofocus: false,
                   onFieldSubmitted: (value) {
@@ -102,7 +168,8 @@ class _PostQuesState extends State<PostQues> {
                     }
                     return null;
                   },
-                  controller: feedController,
+                  controller: quesController,
+                  maxLines: null,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -123,10 +190,12 @@ class _PostQuesState extends State<PostQues> {
                       color: Colors.black54,
                     ),
                     suffixIcon: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        _showPicker(context);
+                      },
                       child: Container(
-                        height: 1,
-                        width: 1,
+                        height: 0.5,
+                        width: 0.5,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                               begin: Alignment.centerLeft,
@@ -138,7 +207,7 @@ class _PostQuesState extends State<PostQues> {
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Icon(
-                          Icons.add,
+                          Icons.add_photo_alternate,
                           color: Colors.white,
                           size: 20,
                         ),
@@ -213,6 +282,7 @@ class _PostQuesState extends State<PostQues> {
                       return mockResults;
                     },
                     onChanged: (data) {
+                      value1 = data;
                       print(data);
                     },
                     chipBuilder: (context, state, dynamic profile) {
@@ -251,15 +321,14 @@ class _PostQuesState extends State<PostQues> {
               onTap: () {
                 setState(
                   () {
-                    // _isLoading = true;
-                    // final FormState? form = _formKey.currentState;
-                    // if (form!.validate()) {
-                    // signUpwithEmail();
-                    //   print('Form is valid');
-                    // } else {
-                    //   print('Form is invalid');
-                    // }
-                    // print("next");
+                    final FormState? form = _formKey.currentState;
+                    if (form!.validate()) {
+                      _isLoading = true;
+                      PostQues();
+                      print('Form is valid');
+                    } else {
+                      print('Form is invalid');
+                    }
                   },
                 );
               },
@@ -294,26 +363,115 @@ class _PostQuesState extends State<PostQues> {
     );
   }
 
-  Postfeed() {
-    // functions.showprogress();
-    PostFeedReq2 feedReq2 = PostFeedReq2();
-    feedReq2.userId = Strings.user_id;
-    feedReq2.feedSummary = feedController.text;
-    feedReq2.interests = tagController.text;
-    final api = Provider.of<ApiService>(ctx!, listen: false);
-    //(feedReq2.interests ==null)?
-    api.postFeed2(feedReq2).then((response) {
-      print('response ${response.status}');
-      print("result:$response");
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Gallery'),
+                      onTap: () {
+                        _getFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      _getFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
 
-      if (response.status == true) {
-        isLoading = false;
-
-        print("result:$response");
+  _getFromGallery() async {
+    image =
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+    setState(() {
+      if (image != null) {
+        final bytes = File(image!.path).readAsBytesSync();
+        img64 = base64Encode(bytes);
+        print("img64" + img64);
+        setState(() {});
+        print('image selected.');
       } else {
-        print("error");
+        setState(() {});
+        print('No image selected.');
       }
     });
+  }
+
+  /// Get from Camera
+  _getFromCamera() async {
+    image =
+        await _picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+    setState(() {
+      if (image != null) {
+        final bytes = File(image!.path).readAsBytesSync();
+        img64 = base64Encode(bytes);
+        setState(() {});
+        print('image selected.');
+      } else {
+        setState(() {});
+        print('No image selected.');
+      }
+    });
+  }
+
+  PostQues() {
+    print("uid" + Strings.user_id.toString());
+    // functions.showprogress();
+    PostQuesReq2 quesReq2 = PostQuesReq2();
+    quesReq2.userId = Strings.user_id;
+    quesReq2.questionSummary = quesController.text;
+    quesReq2.interests = value1;
+    log(quesReq2.toJson().toString());
+
+    PostQuesReq quesReq = PostQuesReq();
+    quesReq.userId = Strings.user_id;
+    quesReq.questionSummary = quesController.text;
+    quesReq.interests = value1.toString();
+    quesReq.questionImage = "data:image/jpeg;base64,$img64";
+    log(quesReq.toJson().toString());
+    final api = Provider.of<ApiService>(ctx!, listen: false);
+    (img64 == null || img64 == "")
+        ? api.postQuest2(quesReq2).then((response) {
+            print('response ${response.status}');
+            print("result1:$response");
+
+            if (response.status == true) {
+              _isLoading = false;
+              //  Get.off(() => DashPage());
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => DashPage()));
+              print("result2:$response");
+            } else {
+              print("error");
+            }
+          })
+        : api.postQuest(quesReq).then((response) {
+            print('response ${response.status}');
+            print("result3:$response");
+
+            if (response.status == true) {
+              _isLoading = false;
+              // Get.off(() => DashPage());
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => DashPage()));
+              print("result4:$response");
+            } else {
+              print("error");
+            }
+          });
   }
 }
 

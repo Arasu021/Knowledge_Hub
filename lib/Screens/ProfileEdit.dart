@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -254,11 +255,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                                           child: ClipOval(
                                             child: Center(
                                               child: (myprofile![0]
-                                                              .profilePicture) ==
+                                                              .profilePicture ==
                                                           "" ||
-                                                      (myprofile![0]
-                                                              .profilePicture) ==
-                                                          null
+                                                      myprofile![0]
+                                                              .profilePicture ==
+                                                          null ||
+                                                      myprofile![0]
+                                                              .profilePicture ==
+                                                          "undefined")
                                                   ? Icon(
                                                       Icons.person,
                                                       color:
@@ -278,7 +282,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                                           ),
                                                         )
                                                       : Image.network(
-                                                          "https://picsum.photos/seed/picsum/200/300",
+                                                          "https://demo.emeetify.com:3422/${myprofile![0].profilePicture}",
                                                           fit: BoxFit.cover,
                                                           width: MediaQuery.of(
                                                                   context)
@@ -734,11 +738,17 @@ class _ProfileEditState extends State<ProfileEdit> {
     updateUserreq2.fullName = nameController.text;
     updateUserreq2.interests = interestController.text;
     updateUserreq2.workExperience = experienceController.text;
-    updateUserreq2.profilePicture = img64;
+    updateUserreq2.profilePicture = "data:image/jpeg;base64,$img64";
+
+    // log("image--> ${json.encode(updateUserreq2)}");
+    var data = json.encode(updateUserreq);
+    log(data);
     int? uid = Strings.user_id;
 
     final api = Provider.of<ApiService>(ctx!, listen: false);
-    (img64 == null)
+
+    print("img64$img64");
+    (img64 == null || img64 == "")
         ? api.updateUser(uid!, updateUserreq).then((response) {
             print('response1 ${response.status}');
             print("result:$response");
@@ -756,7 +766,6 @@ class _ProfileEditState extends State<ProfileEdit> {
 
             if (response.status == true) {
               print("result:$response");
-              Strings.user_id = response.data!.userId!;
               functions.createSnackBar(context, "User Details Updated!..");
               Get.to(() => MyProfilePage());
             } else {

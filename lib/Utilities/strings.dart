@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_plus_platform_interface/src/enums.dart';
 import 'package:flutter/material.dart';
+import 'package:skein_community/Models/Auth/GetUserRes.dart';
 
 mixin Strings {
   static String authToken = '';
@@ -25,4 +26,6 @@ mixin Strings {
   static String? data_mobile;
 
   static String? data_interests;
+
+  static List<ProfileData>? myprofile;
 }

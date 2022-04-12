@@ -15,9 +15,10 @@ class _FeedsLikeScreenState extends State<FeedsLikeScreen> {
 
   GetFeedLikeData? selectedUser;
 
-  _FeedsLikeScreenState(List<GetFeedLikeData>? feedsLikesData);
+  _FeedsLikeScreenState(this.feedsLikesData);
   @override
   Widget build(BuildContext context) {
+    print("object" + feedsLikesData!.length.toString());
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -44,118 +45,54 @@ class _FeedsLikeScreenState extends State<FeedsLikeScreen> {
             ),
             preferredSize: Size(0.0, 0.0)),
       ),
-      body: Column(
-        children: [
-          ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: feedsLikesData?.length,
-            itemBuilder: (BuildContext context, int index) => InkWell(
-                onTap: () {
-                  //print(data![index].id);
-                  setState(() {
-                    selectedUser = feedsLikesData![index];
-                  });
-                  //_showForm(dataList![index].id,context);
-                  // _displayDialog(context);
-                  //Navigator.pop(context);
-                },
-                child: Card(
-                  color: Colors.white70,
-                  margin: const EdgeInsets.all(15),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      child: ClipOval(
-                        child: Center(
-                          child: (feedsLikesData![index].profilePicture) == ""
-                              ? Icon(
-                                  Icons.person,
-                                  color: Colors.grey.shade600,
-                                  size: 30,
-                                )
-                              : Image.network(
-                                  "https://paytm.justlogix.com/" +
-                                      (feedsLikesData![index]
-                                          .profilePicture
-                                          .toString()),
-                                  fit: BoxFit.cover,
-                                  width: MediaQuery.of(context).size.width,
-                                ),
+      body: ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: feedsLikesData?.length,
+        itemBuilder: (BuildContext context, int index) => InkWell(
+            // onTap: () {
+            //   //print(data![index].id);
+            //   setState(() {
+            //     selectedUser = feedsLikesData![index];
+            //   });
+            //   //_showForm(dataList![index].id,context);
+            //   // _displayDialog(context);
+            //   //Navigator.pop(context);
+            // },
+            child: Card(
+          color: Colors.white70,
+          margin: const EdgeInsets.all(15),
+          child: ListTile(
+            leading: CircleAvatar(
+              child: ClipOval(
+                child: Center(
+                  child: (feedsLikesData![index].profilePicture == "" ||
+                          feedsLikesData![index].profilePicture == null ||
+                          feedsLikesData![index].profilePicture == "undefined")
+                      ? Icon(
+                          Icons.person,
+                          color: Colors.grey.shade600,
+                          size: 30,
+                        )
+                      : Image.network(
+                          "https://demo.emeetify.com:3422/" +
+                              (feedsLikesData![index]
+                                  .profilePicture
+                                  .toString()),
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width,
                         ),
-                      ),
-                      radius: 25,
-                      backgroundColor: Colors.grey.shade300,
-                    ),
-                    title: Text(feedsLikesData![index].fullName.toString()),
-                    subtitle:
-                        Text(feedsLikesData![index].designation.toString()),
-                    // trailing: SizedBox(
-                    //   width: 100,
-                    // )
-                  ),
-                )),
+                ),
+              ),
+              radius: 25,
+              backgroundColor: Colors.grey.shade300,
+            ),
+            title: Text(feedsLikesData![index].fullName.toString()),
+            subtitle: Text(feedsLikesData![index].designation.toString()),
+            // trailing: SizedBox(
+            //   width: 100,
+            // )
           ),
-          // Expanded(
-          //   child: Align(
-          //     alignment: FractionalOffset.bottomCenter,
-          //     child: Container(
-          //       padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
-          //       height: 60,
-          //       width: double.infinity,
-          //       color: Colors.white,
-          //       child: Row(
-          //         children: <Widget>[
-          //           CircleAvatar(
-          //             child: ClipOval(
-          //               child: Center(
-          //                 child:
-          //                     // (FeedsData![index]
-          //                     //             .feedImage) ==
-          //                     //         ""
-          //                     //     ? Icon(
-          //                     //         Icons.person,
-          //                     //         color: Colors.grey.shade600,
-          //                     //         size: 30,
-          //                     //       )
-          //                     //     :
-          //                     Image.network(
-          //                   "https://picsum.photos/seed/picsum/200/300",
-          //                   fit: BoxFit.cover,
-          //                   width: MediaQuery.of(context).size.width,
-          //                 ),
-          //               ),
-          //             ),
-          //             radius: 17,
-          //             backgroundColor: Colors.grey.shade300,
-          //           ),
-          //           SizedBox(
-          //             width: 15,
-          //           ),
-          //           Expanded(
-          //             child: TextField(
-          //               decoration: InputDecoration(
-          //                   fillColor: Colors.black,
-          //                   hintText: "Add a comment...",
-          //                   hintStyle: TextStyle(color: Colors.black54),
-          //                   border: InputBorder.none),
-          //             ),
-          //           ),
-          //           SizedBox(
-          //             width: 15,
-          //           ),
-          //           GestureDetector(
-          //             onTap: (() {}),
-          //             child: Text(
-          //               "Post   ",
-          //               style: TextStyle(
-          //                   fontWeight: FontWeight.bold, color: Colors.blue),
-          //             ),
-          //           )
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
-        ],
+        )),
       ),
     );
   }

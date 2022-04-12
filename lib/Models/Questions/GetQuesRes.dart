@@ -30,7 +30,7 @@ class GetQuesRes {
 class GetQuesData {
   int? questionId;
   String? questionSummary;
-  Null? questionImage;
+  String? questionImage;
   String? interests;
   int? userId;
   int? questionViews;
