@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skein_community/Models/Auth/LoginReq.dart';
+import 'package:skein_community/Screens/LandingScreen.dart';
 import 'package:skein_community/Screens/dashboard.dart';
 import 'package:skein_community/Screens/dashboard2.dart';
 import 'package:skein_community/Screens/signUp.dart';
@@ -27,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   var isLoading = false;
 
   late String smsOTP;
-  late String verificationId;
+  // late String verificationId;
   String errorMessage = '';
   FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -38,6 +39,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
 
   bool? showButton = true;
+
+  late String verId;
 
   //  final FirebaseMessaging Messaging = FirebaseMessaging.instance;
 
@@ -110,9 +113,9 @@ class _LoginPageState extends State<LoginPage> {
                             visible: showButton!,
                             child: ElevatedButton(
                               onPressed: () {
-                                _isLoading = true;
-                                signInwithEmail();
                                 // verifyPhone();
+
+                                _isLoading = true;
                                 String? phone = emailController.text;
                                 if (phone == null ||
                                     phone.isEmpty ||
@@ -121,6 +124,8 @@ class _LoginPageState extends State<LoginPage> {
                                       context, "Enter a valid mobile number");
                                 } else {
                                   //continued();
+
+                                  signInwithEmail();
                                   setState(() {
                                     print("--------");
                                     if (_currentStep >= 1) {
@@ -223,24 +228,15 @@ class _LoginPageState extends State<LoginPage> {
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
                               child: TextFormField(
+                                maxLength: 6,
                                 autofocus: false,
-                                //           validator: (value) =>
-                                // value!.isEmpty ? 'Password cannot be blank' : null,
-                                onFieldSubmitted: (value) {
-                                  //Validator
-                                },
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Enter a valid OTP';
-                                  }
-                                  return null;
-                                },
-
-                                //   if (val.isEmpty) {
-                                //   return 'Can\'t be empty';
-                                // } else {
+                                onFieldSubmitted: (value) {},
+                                // validator: (value) {
+                                //   if (value == null || value.isEmpty || value.length != 6) {
+                                //     return 'Enter a valid OTP';
+                                //   }
                                 //   return null;
-                                // }
+                                // },
                                 controller: passwordController,
 
                                 onChanged: (value) {
@@ -281,7 +277,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
 
                                 minLines: 1,
-                                keyboardType: TextInputType.emailAddress,
+                                keyboardType: TextInputType.number,
                                 //autofocus: false,
                               ),
                             ),
@@ -309,23 +305,12 @@ class _LoginPageState extends State<LoginPage> {
                     setState(
                       () {
                         _isLoading = true;
-                        // signInwithEmail();
-                        // verifyPhone();
                         String? otp = passwordController.text;
                         if (otp == null || otp.isEmpty || otp.length != 6) {
                           functions.createSnackBar(
                               context, "Enter a valid OTP");
                         } else {
-                          // var hhjf = _auth.currentUser;
-                          // if (hhjf != null) {
-                          // Navigator.of(context).pop();
-                          // Get.off(() => DashPage());
-                          // } else {
                           signIn();
-                          //  }
-                          // } else {
-                          //   print('Form is invalid');
-                          // }
                         }
                       },
                     );
@@ -444,38 +429,78 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> verifyPhone() async {
-    final PhoneCodeSent smsOTPSent = (String verId, [int? forceCodeResend]) {
-      this.verificationId = verId;
+    // final PhoneCodeSent smsOTPSent = (String verId, [int? forceCodeResend]) {
+    //   this.verificationId = verId;
+    //   _isLoading = false;
+    //   continued();
+    // };
+    // try {
+    //   await _auth.verifyPhoneNumber(
+    //       phoneNumber: '+91${emailController.text}', // PHONE NUMBER TO SEND OTP
+    //       codeAutoRetrievalTimeout: (String verId) {
+    //         //Starts the phone number verification process for the given phone number.
+    //         //Either sends an SMS with a 6 digit code to the phone number specified, or sign's the user in and [verificationCompleted] is called.
+    //         this.verificationId = verId;
+    //       },
+    //       codeSent:
+    //           smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
+    //       timeout: const Duration(seconds: 20),
+    //       verificationCompleted: (AuthCredential phoneAuthCredential) {
+    //         print(phoneAuthCredential);
+    //       },
+    //       verificationFailed: (FirebaseAuthException exceptio) {
+    //         print('${exceptio.message}');
+    //       });
+    // } catch (e) {
+    //   // handleError(e);
+    //   print("Error:$e");
+    //   functions.createSnackBar(context, e.toString());
+    // }
+
+    // For firebase auth
+    final auth = FirebaseAuth.instance;
+//
+    final PhoneVerificationCompleted verificationCompleted =
+        (AuthCredential phoneAuthCredential) async {
+      final res = await auth.signInWithCredential(phoneAuthCredential);
+      // Todo After Verification Complete
+      // );
+    };
+//
+    final PhoneVerificationFailed verificationFailed =
+        (FirebaseAuthException authException) {
+      print('Auth Exception is ${authException.message}');
+      functions.createSnackBar(context, authException.message.toString());
+      Get.off(() => SecondScreen());
+    };
+//
+    final PhoneCodeSent smsOTPSent =
+        (String verificationId, [int? forceResendingToken]) async {
+      print('verification id is $verificationId');
+      verId = verificationId;
       _isLoading = false;
       continued();
     };
-    try {
-      await _auth.verifyPhoneNumber(
-          phoneNumber: '+91${emailController.text}', // PHONE NUMBER TO SEND OTP
-          codeAutoRetrievalTimeout: (String verId) {
-            //Starts the phone number verification process for the given phone number.
-            //Either sends an SMS with a 6 digit code to the phone number specified, or sign's the user in and [verificationCompleted] is called.
-            this.verificationId = verId;
-          },
-          codeSent:
-              smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
-          timeout: const Duration(seconds: 20),
-          verificationCompleted: (AuthCredential phoneAuthCredential) {
-            print(phoneAuthCredential);
-          },
-          verificationFailed: (FirebaseAuthException exceptio) {
-            print('${exceptio.message}');
-          });
-    } catch (e) {
-      // handleError(e);
-      print("Error:$e");
-    }
+//
+    final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
+        (String verificationId) {
+      verId = verificationId;
+    };
+//
+    await auth.verifyPhoneNumber(
+        // mobile no. with country code
+        phoneNumber: '+91${emailController.text}',
+        timeout: const Duration(seconds: 30),
+        verificationCompleted: verificationCompleted,
+        verificationFailed: verificationFailed,
+        codeSent: smsOTPSent,
+        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
   }
 
   signIn() async {
     try {
       final AuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId,
+        verificationId: verId,
         smsCode: smsOTP,
       );
       final user = await _auth.signInWithCredential(credential);
@@ -487,15 +512,18 @@ class _LoginPageState extends State<LoginPage> {
       Get.off(() => const DashPage());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
+        functions.createSnackBar(context, e.code.toString());
         // handle the error here
         print("account-exists-with-different-credential");
       } else if (e.code == 'invalid-credential') {
+        functions.createSnackBar(context, e.code.toString());
         // handle the error here
         print("invalid-credential");
       }
     } catch (e) {
       //  handleError(e);
       print("Error:$e");
+      functions.createSnackBar(context, e.toString());
     }
   }
 }

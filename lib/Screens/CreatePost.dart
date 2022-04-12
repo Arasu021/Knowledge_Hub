@@ -28,7 +28,7 @@ class _PostScreenState extends State<PostScreen> {
           appBar: AppBar(
             backgroundColor: Colors.white,
             title: Text(
-              '   New Post',
+              'New Post',
               textScaleFactor: 1.12,
               style: TextStyle(
                 color: Colors.black.withOpacity(.7),

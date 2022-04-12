@@ -5,6 +5,7 @@ import 'package:skein_community/Screens/ChatsMainPage.dart';
 import 'package:skein_community/Screens/CreatePost.dart';
 import 'package:skein_community/Screens/dashboard.dart';
 import 'package:skein_community/Screens/login.dart';
+import 'package:skein_community/functions/functions.dart';
 
 class DashPage extends StatefulWidget {
   const DashPage({Key? key}) : super(key: key);

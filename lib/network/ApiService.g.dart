@@ -14,20 +14,11 @@ class _ApiService implements ApiService {
   }
 
   final Dio _dio;
-  certificatecheck() {
-    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-      return client;
-    };
-  }
 
   String? baseUrl;
 
   @override
   Future<LoginRes> login(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -45,7 +36,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<SignupRes> userRegister(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -65,44 +55,41 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<SignupRes> updateUser(id, body) async {
-    certificatecheck();
+  Future<UpdateUserRees> updateUser(id, body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<SignupRes>(
-            Options(method: 'POST', headers: _headers, extra: _extra)
+        _setStreamType<UpdateUserRees>(
+            Options(method: 'PUT', headers: _headers, extra: _extra)
                 .compose(_dio.options, 'users/updateUser?user_id=${id}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = SignupRes.fromJson(_result.data!);
+    final value = UpdateUserRees.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<SignupRes> updateUser2(id, body) async {
-    certificatecheck();
+  Future<UpdateUserRees> updateUser2(id, body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<SignupRes>(
-            Options(method: 'POST', headers: _headers, extra: _extra)
+        _setStreamType<UpdateUserRees>(
+            Options(method: 'PUT', headers: _headers, extra: _extra)
                 .compose(_dio.options, 'users/updateUser?user_id=${id}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = SignupRes.fromJson(_result.data!);
+    final value = UpdateUserRees.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<GetUserRes> getUser(id) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -118,8 +105,7 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<GetFeedRes> getFeed(interests) async {
-    certificatecheck();
+  Future<GetFeedRes> getFeed(interests, page) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -127,7 +113,8 @@ class _ApiService implements ApiService {
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<GetFeedRes>(
             Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, 'feeds/getfeed?interests=${interests}',
+                .compose(_dio.options,
+                    'feeds/getfeed?interests=${interests}&&page_no=${page}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = GetFeedRes.fromJson(_result.data!);
@@ -136,7 +123,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<GetAllFeedRes> getAllFeed() async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -153,7 +139,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<PostFeedRes> postFeed(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -174,7 +159,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<PostFeedRes> postFeed2(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -195,7 +179,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<UpdateFeedRes> UpdateFeed(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -213,7 +196,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<UpdateFeedRes> UpdateFeed2(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -231,7 +213,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<PostFeedRes> AddFeedLike(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -249,7 +230,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<GetLikedUsersRes> getFeedLike(feed_id) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -265,25 +245,24 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<PostFeedRes> RemoveFeedLike() async {
-    certificatecheck();
+  Future<PostFeedRes> RemoveFeedLike(feed_id, user_id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostFeedRes>(
-            Options(method: 'DELETE', headers: _headers, extra: _extra)
-                .compose(_dio.options, 'feeds/deletefeedlike?feed_like_id=3',
-                    queryParameters: queryParameters, data: _data)
-                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        _setStreamType<PostFeedRes>(Options(
+                method: 'DELETE', headers: _headers, extra: _extra)
+            .compose(_dio.options,
+                'feeds/deletefeedlike?feed_id=${feed_id}&&user_id=${user_id}',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = PostFeedRes.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<getFeedCommentRes> getFeedComment(feed_id) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -300,7 +279,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<PostFeedCommentRes> postFeedComment(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -318,7 +296,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<PostFeedRes> RemoveFeedComment(feed_comment_id) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -336,7 +313,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<GetQuesRes> getQuest(interests) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -353,8 +329,7 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<GetQuesRes> getAllQuest() async {
-    certificatecheck();
+  Future<GetQuesRes> getQuestId(question_id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -362,7 +337,8 @@ class _ApiService implements ApiService {
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<GetQuesRes>(
             Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, 'feeds/getallfeed',
+                .compose(_dio.options,
+                    'questions/getquestion?question_id=${question_id}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = GetQuesRes.fromJson(_result.data!);
@@ -371,7 +347,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<PostFeedRes> postQuest(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -383,7 +358,7 @@ class _ApiService implements ApiService {
                 headers: _headers,
                 extra: _extra,
                 contentType: 'multipart/form-data')
-            .compose(_dio.options, 'feeds/addfeed',
+            .compose(_dio.options, 'questions/addquestion',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = PostFeedRes.fromJson(_result.data!);
@@ -392,7 +367,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<PostFeedRes> postQuest2(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -404,7 +378,7 @@ class _ApiService implements ApiService {
                 headers: _headers,
                 extra: _extra,
                 contentType: 'multipart/form-data')
-            .compose(_dio.options, 'feeds/addfeed',
+            .compose(_dio.options, 'questions/addquestion',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = PostFeedRes.fromJson(_result.data!);
@@ -413,7 +387,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<UpdateFeedRes> UpdateQuest(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -431,7 +404,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<UpdateFeedRes> UpdateQuest2(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -449,7 +421,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<PostFeedRes> AddQuestLike(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -467,7 +438,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<PostFeedRes> RemoveQuestLike() async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -484,7 +454,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<getFeedCommentRes> getReplyQuesComment(feed_id) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -502,7 +471,6 @@ class _ApiService implements ApiService {
 
   @override
   Future<PostFeedCommentRes> postReplyQuesComment(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -519,26 +487,24 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<getFeedCommentRes> getQuesAnswer(feed_id) async {
-    certificatecheck();
+  Future<GetAnswerRes> getQuesAnswer(questions_id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<getFeedCommentRes>(
-            Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(
-                    _dio.options, 'comments/getanswer?questions_id=${feed_id}',
-                    queryParameters: queryParameters, data: _data)
-                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = getFeedCommentRes.fromJson(_result.data!);
+        _setStreamType<GetAnswerRes>(Options(
+                method: 'GET', headers: _headers, extra: _extra)
+            .compose(
+                _dio.options, 'comments/getanswer?questions_id=${questions_id}',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = GetAnswerRes.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<PostFeedCommentRes> postQuesAnswer(body) async {
-    certificatecheck();
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

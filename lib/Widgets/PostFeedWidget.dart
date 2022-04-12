@@ -83,18 +83,27 @@ class _PostFeedState extends State<PostFeed> {
             leading: CircleAvatar(
               child: ClipOval(
                 child: Center(
-                  child: Image.network(
-                    "https://picsum.photos/seed/picsum/200/300",
-                    fit: BoxFit.cover,
-                    width: MediaQuery.of(context).size.width,
-                  ),
+                  child: (Strings.myprofile![0].profilePicture == "" ||
+                          Strings.myprofile![0].profilePicture == null ||
+                          Strings.myprofile![0].profilePicture == "undefined")
+                      ? Icon(
+                          Icons.person,
+                          color: Colors.grey.shade700,
+                          size: 25,
+                        )
+                      : Image.network(
+                          //"https://picsum.photos/seed/picsum/200/300",
+                          "https://demo.emeetify.com:3422/${Strings.myprofile![0].profilePicture}",
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width,
+                        ),
                 ),
               ),
               radius: 30,
               backgroundColor: Colors.grey.shade300,
             ),
-            title: Text("Arasuewaran R"),
-            subtitle: Text("flutter developer"),
+            title: Text(Strings.myprofile![0].fullName.toString()),
+            subtitle: Text(Strings.myprofile![0].designation.toString()),
             // trailing: SizedBox(
             //   width: 100,
             // )
@@ -104,8 +113,49 @@ class _PostFeedState extends State<PostFeed> {
           key: _formKey,
           child: Column(
             children: [
+              (image != null)
+                  ? Stack(children: [
+                      Image.file(
+                        File(image!.path),
+                        width: 250,
+                        height: 190,
+                        fit: BoxFit.fitHeight,
+                      ),
+                      Positioned(
+                        top: 1,
+                        right: 1,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              image = null;
+                            });
+                          },
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [
+                                      Colors.yellow.shade700,
+                                      Colors.orange.shade600
+                                    ]),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            child: Icon(
+                              Icons.clear,
+                              size: 17,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ),
+                      )
+                    ])
+                  : Container(),
               Padding(
-                padding: EdgeInsets.fromLTRB(20, 50, 20, 4),
+                padding:
+                    EdgeInsets.fromLTRB(20, (image != null) ? 10 : 50, 20, 4),
                 child: TextFormField(
                   autofocus: false,
                   onFieldSubmitted: (value) {
@@ -118,6 +168,7 @@ class _PostFeedState extends State<PostFeed> {
                     return null;
                   },
                   controller: feedController,
+                  maxLines: null,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -142,8 +193,8 @@ class _PostFeedState extends State<PostFeed> {
                         _showPicker(context);
                       },
                       child: Container(
-                        height: 1,
-                        width: 1,
+                        height: 0.5,
+                        width: 0.5,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                               begin: Alignment.centerLeft,
@@ -155,7 +206,7 @@ class _PostFeedState extends State<PostFeed> {
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Icon(
-                          Icons.add,
+                          Icons.add_photo_alternate,
                           color: Colors.white,
                           size: 20,
                         ),
@@ -390,7 +441,7 @@ class _PostFeedState extends State<PostFeed> {
     feedReq.feedImage = "data:image/jpeg;base64,$img64";
 
     final api = Provider.of<ApiService>(ctx!, listen: false);
-    (img64 == null)
+    (img64 == null || img64 == "")
         ? api.postFeed2(feedReq2).then((response) {
             print('response ${response.status}');
             print("result1:$response");

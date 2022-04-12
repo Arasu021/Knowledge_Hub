@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skein_community/Models/Auth/GetUserRes.dart';
 import 'package:skein_community/Screens/ProfileEdit.dart';
+import 'package:skein_community/Screens/dashboard2.dart';
 import 'package:skein_community/Screens/stepperPage.dart';
 import 'package:skein_community/Utilities/strings.dart';
 import 'package:skein_community/functions/functions.dart';
@@ -101,10 +102,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
                           width: 50,
                           child: GestureDetector(
                             onTap: () {
-                              // Navigator.of(context).pushAndRemoveUntil(
-                              //     MaterialPageRoute(
-                              //         builder: (context) => UserList()),
-                              //     (Route<dynamic> route) => false);
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => DashPage()),
+                                  (Route<dynamic> route) => false);
                             },
                             child: Icon(
                               Icons.arrow_back,
@@ -117,14 +118,17 @@ class _MyProfilePageState extends State<MyProfilePage> {
                       CircleAvatar(
                         child: ClipOval(
                           child: Center(
-                            child: (_myprofile![0].profilePicture) == ""
+                            child: (_myprofile![0].profilePicture == "" ||
+                                    _myprofile![0].profilePicture == null ||
+                                    _myprofile![0].profilePicture ==
+                                        "undefined")
                                 ? Icon(
                                     Icons.person,
                                     color: Colors.grey.shade600,
                                     size: 70,
                                   )
                                 : Image.network(
-                                    "https://picsum.photos/seed/picsum/200/300",
+                                    "https://demo.emeetify.com:3422/${_myprofile![0].profilePicture}",
                                     fit: BoxFit.cover,
                                     width: MediaQuery.of(context).size.width,
                                   ),

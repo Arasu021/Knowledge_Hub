@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skein_community/Screens/ChatDetailPage.dart';
 import 'package:skein_community/Screens/ChatsMainPage.dart';
 import 'package:skein_community/Screens/CreatePost.dart';
+import 'package:skein_community/Screens/InfiniteList.dart';
 import 'package:skein_community/Screens/ProfilePage.dart';
 import 'package:skein_community/Screens/dashboard2.dart';
 import 'package:skein_community/Screens/empty.dart';
@@ -28,11 +29,50 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-
   BuildContext? ctx;
+
+  bool? showDrawer = false;
+
+  getProfile() async {
+    showDrawer = true;
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    Strings.authToken = sharedPreferences.getString("token")!;
+    int? user_id = sharedPreferences.getInt("user_id");
+    final api = Provider.of<ApiService>(ctx!, listen: false);
+    api.getUser(user_id!).then((response) {
+      print("response ${response.status}");
+      if (response.status == true) {
+        setState(() {
+          Strings.myprofile = response.data;
+        });
+      }
+    }).catchError((onError) {
+      print(onError.toString());
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
+    return Provider<ApiService>(
+        create: (context) => ApiService.create(),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Builder(builder: (BuildContext newContext) {
+            return FeedPage1(newContext);
+          }),
+        ));
+  }
+
+  FeedPage1(BuildContext context) {
+    ctx = context;
+    print("profile" + Strings.myprofile.toString());
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -102,6 +142,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           body: TabBarView(
             children: [
+              //FeedsPage(),
               FeedsPage(),
               QuesPage(),
               //QuestionsWidget(context),
@@ -111,105 +152,119 @@ class _DashboardPageState extends State<DashboardPage> {
           key: _key,
           drawer: Drawer(
             child: ListView(
-              //padding: EdgeInsets.zero,
+                //padding: EdgeInsets.zero,
 
-              children: <Widget>[
-                (Strings.data_name != null)
-                    ? UserAccountsDrawerHeader(
-                        decoration: BoxDecoration(color: Colors.white),
-                        accountName: Text(
-                          (Strings.data_name.toString()),
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                        accountEmail: Text(
-                          (Strings.data_email.toString()),
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                        currentAccountPicture: CircleAvatar(
-                          child: ClipOval(
-                            child: Center(
-                              child:
-                                  ("https://picsum.photos/seed/picsum/200/300") ==
-                                          ""
-                                      ? Icon(
-                                          Icons.person,
-                                          color: Colors.grey.shade700,
-                                          size: 60,
-                                        )
-                                      : Image.network(
-                                          "https://picsum.photos/seed/picsum/200/300",
-                                          // "https://paytm.justlogix.com/$userImg",
-                                          fit: BoxFit.cover,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                        ),
-                            ),
-                          ),
-                          radius: 70,
-                          backgroundColor: Colors.grey.shade300,
-                        ),
-                      )
-                    : DrawerHeader(
-                        child: Center(
-                          child: RaisedButton(
-                            onPressed: () {
-                              setState(() {});
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => LoginPage()));
-                            },
-                            child: Text(('LOGIN'),
-                                style: TextStyle(color: Colors.white)),
-                            padding: const EdgeInsets.symmetric(horizontal: 0),
-                            color: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                      ),
-                // IconButton(
-                //   padding: const EdgeInsets.only(
-                //       top: 0, left: 10, right: 0, bottom: 0.0),
-                //   alignment: Alignment.centerLeft,
-                //   iconSize: 25,
-                //   icon: const Icon(Icons.close),
-                //   onPressed: () {
-                //     Navigator.pop(
-                //         context,
-                //         MaterialPageRoute(
-                //             builder: (context) => const DashPage()));
-                //   },
-                // ),
-                ListTile(
-                  leading: const Icon(Icons.person_outline_rounded),
-                  title: const Text('My Profile'),
-                  onTap: () => {
-                    //Navigator.of(context).pop()
-                    Get.to(() => const MyProfilePage()),
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text('Logout'),
-                  onTap: () => {
-                    // Navigator.of(context).pop(),
-                    // //signout(),
-                    // Get.off(() => StepperDemo()),
-                    functions.logout(),
-                  },
-                ),
-              ],
-            ),
+                children: <Widget>[
+                  (showDrawer = true)
+                      ? (Strings.myprofile?[0] != null)
+                          ? UserAccountsDrawerHeader(
+                              decoration: BoxDecoration(color: Colors.white),
+                              accountName: Text(
+                                (Strings.myprofile![0].fullName.toString()),
+                                // "hii",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+                              accountEmail: Text(
+                                (Strings.myprofile![0].email.toString()),
+                                // "hii",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+                              currentAccountPicture: CircleAvatar(
+                                child: ClipOval(
+                                  child: Center(
+                                    child:
+                                        (Strings.myprofile![0].profilePicture ==
+                                                    "" ||
+                                                Strings.myprofile![0]
+                                                        .profilePicture ==
+                                                    null ||
+                                                Strings.myprofile![0]
+                                                        .profilePicture ==
+                                                    "undefined")
+                                            ? Icon(
+                                                Icons.person,
+                                                color: Colors.grey.shade700,
+                                                size: 60,
+                                              )
+                                            : Image.network(
+                                                //"https://picsum.photos/seed/picsum/200/300",
+                                                "https://demo.emeetify.com:3422/${Strings.myprofile![0].profilePicture}",
+                                                fit: BoxFit.cover,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                              ),
+                                  ),
+                                ),
+                                radius: 70,
+                                backgroundColor: Colors.grey.shade300,
+                              ),
+                            )
+                          : DrawerHeader(
+                              child: Center(
+                                child: RaisedButton(
+                                  onPressed: () {
+                                    setState(() {});
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => LoginPage()));
+                                  },
+                                  child: Text(('LOGIN'),
+                                      style: TextStyle(color: Colors.white)),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 0),
+                                  color: Colors.blue,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                ),
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                              ),
+                            )
+                      : Center(
+                          child: CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.grey))),
+                  // IconButton(
+                  //   padding: const EdgeInsets.only(
+                  //       top: 0, left: 10, right: 0, bottom: 0.0),
+                  //   alignment: Alignment.centerLeft,
+                  //   iconSize: 25,
+                  //   icon: const Icon(Icons.close),
+                  //   onPressed: () {
+                  //     Navigator.pop(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) => const DashPage()));
+                  //   },
+                  // ),
+                  ListTile(
+                    leading: const Icon(Icons.person_outline_rounded),
+                    title: const Text('My Profile'),
+                    onTap: () => {
+                      //Navigator.of(context).pop()
+                      Get.to(() => const MyProfilePage()),
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.logout),
+                    title: const Text('Logout'),
+                    onTap: () => {
+                      // Navigator.of(context).pop(),
+                      // //signout(),
+                      // Get.off(() => StepperDemo()),
+                      functions.logout(),
+                    },
+                  ),
+                ]),
           ),
         ));
   }

@@ -3,8 +3,12 @@ import 'package:animations/animations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skein_community/Screens/LandingScreen.dart';
 import 'package:skein_community/Screens/dashboard2.dart';
+import 'package:skein_community/Utilities/strings.dart';
+import 'package:skein_community/network/ApiService.dart';
 
 class FirstScreen extends StatefulWidget {
   @override
@@ -14,9 +18,13 @@ class FirstScreen extends StatefulWidget {
 class _FirstScreenState extends State<FirstScreen> {
   bool _a = false;
 
+  BuildContext? ctx;
+
   @override
   void initState() {
     super.initState();
+
+    // getProfile();
     Timer(Duration(milliseconds: 700), () {
       setState(() {
         _a = !_a;
@@ -28,6 +36,21 @@ class _FirstScreenState extends State<FirstScreen> {
       //     .pushReplacement(SlideTransitionAnimation(SecondScreen()));
     });
   }
+
+  // getProfile() async {
+  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  //   Strings.authToken = sharedPreferences.getString("token")!;
+  //   int? user_id = sharedPreferences.getInt("user_id");
+  //   final api = Provider.of<ApiService>(ctx!, listen: false);
+  //   api.getUser(user_id!).then((response) {
+  //     print("response ${response.status}");
+  //     if (response.status == true) {
+  //       Strings.myprofile = response.data;
+  //     }
+  //   }).catchError((onError) {
+  //     print(onError.toString());
+  //   });
+  // }
 
   Future<void> Refreshid() async {
     FirebaseAuth.instance.userChanges().listen((User? user) {
@@ -54,6 +77,18 @@ class _FirstScreenState extends State<FirstScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return Provider<ApiService>(
+        create: (context) => ApiService.create(),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Builder(builder: (BuildContext newContext) {
+            return FeedsPage1(newContext);
+          }),
+        ));
+  }
+
+  FeedsPage1(BuildContext context) {
+    ctx = context;
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
 

@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:skein_community/Models/Feeds/postFeedCommentReq.dart';
 import 'package:skein_community/Screens/login.dart';
 import 'package:skein_community/Utilities/strings.dart';
 import 'package:skein_community/network/ApiService.dart';
@@ -227,6 +228,42 @@ class functions {
 
     // Find the Scaffold in the Widget tree and use it to show a SnackBar!
     ScaffoldMessenger.of(scaffoldContext).showSnackBar(snackBar);
+  }
+
+  static void getProfile(ctx) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    //functions.showprogress();
+    Strings.authToken = sharedPreferences.getString("token")!;
+    print("token:" + Strings.authToken);
+    int? user_id = sharedPreferences.getInt("user_id");
+    final api = Provider.of<ApiService>(ctx!, listen: false);
+    api.getUser(user_id!).then((response) {
+      print("response ${response.status}");
+      Strings.myprofile = response.data;
+      // String raw1 = jsonEncode(_myprofile);
+      // sharedPreferences.setString("list", raw1);
+      // print(raw1.toString());
+    }).catchError((onError) {
+      print(onError.toString());
+    });
+  }
+
+    static void addFeedComment(FUid, Fid, uid, comment, ctx, context) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    PostFeedCommentReq feedComments = PostFeedCommentReq();
+    feedComments.userId = FUid;
+    feedComments.feedId = Fid;
+    feedComments.clickUserId = Strings.user_id;
+    feedComments.comment = comment;
+    final api = Provider.of<ApiService>(ctx!, listen: false);
+    api.postFeedComment(feedComments).then((response) {
+      if (response.status == true) {
+        // getFeeds();
+        // commentController.clear();
+      } else {
+        createSnackBar(context, response.message.toString());
+      }
+    });
   }
 }
 

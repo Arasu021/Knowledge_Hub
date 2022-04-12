@@ -60,7 +60,7 @@ class _StepperDemoState extends State<StepperDemo> {
 
   ProfileData? user;
 
-  dynamic value1;
+  List<Object?> value1 = [];
 
   //  final FirebaseMessaging Messaging = FirebaseMessaging.instance;
 
@@ -413,8 +413,7 @@ class _StepperDemoState extends State<StepperDemo> {
                                         ),
                                         //           validator: (value) =>
                                         // value!.isEmpty ? 'Email cannot be blank' : null,
-                                        keyboardType:
-                                            TextInputType.emailAddress,
+                                        keyboardType: TextInputType.number,
                                       ),
                                     ),
                                     SizedBox(
@@ -610,8 +609,9 @@ class _StepperDemoState extends State<StepperDemo> {
                                           },
                                           validator: (value) {
                                             if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Enter Your Mobile Nummber';
+                                                value.isEmpty ||
+                                                value.length != 10) {
+                                              return 'Enter a valid Mobile Number';
                                             }
                                             return null;
                                           },
@@ -682,7 +682,8 @@ class _StepperDemoState extends State<StepperDemo> {
                                           },
                                           validator: (value) {
                                             if (value == null ||
-                                                value.isEmpty) {
+                                                value.isEmpty ||
+                                                value != 6) {
                                               return 'Enter valid OTP';
                                             }
                                             return null;
@@ -745,20 +746,21 @@ class _StepperDemoState extends State<StepperDemo> {
                             onTap: () {
                               setState(
                                 () {
-                                  _isLoading = true;
-                                  final FormState? form = _formKey.currentState;
-                                  if (form!.validate()) {
-                                    // DioClient controller =
-                                    //     Get.put(DioClient());
-                                    // controller.signInwithEmail2(
-                                    //   emailController.text,
-                                    // );
-                                    signUpwithEmail();
-                                    print('Form is valid');
+                                  if (showButton == true) {
+                                    _isLoading = true;
+                                    final FormState? form =
+                                        _formKey.currentState;
+                                    if (form!.validate()) {
+                                      signUpwithEmail();
+                                      print('Form is valid');
+                                    } else {
+                                      print('Form is invalid');
+                                    }
+                                    print("next");
                                   } else {
-                                    print('Form is invalid');
+                                    functions.createSnackBar(context,
+                                        "Need to Complete the verification");
                                   }
-                                  print("next");
                                 },
                               );
                             },
@@ -931,7 +933,12 @@ class _StepperDemoState extends State<StepperDemo> {
 
       print("data2");
       // continued();
-      CheckMobile();
+      String? mobile = mobileController.text;
+      if (mobile == null || mobile.isEmpty || mobile.length != 10) {
+        functions.createSnackBar(context, "Enter a valid Moble Number");
+      } else {
+        CheckMobile();
+      }
       // verifyPhone();
     } else if (_currentStep == 2) {
       String? otp = otpController.text;

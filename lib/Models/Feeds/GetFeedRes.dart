@@ -35,6 +35,14 @@ class FeedsDatum {
   int? userId;
   String? createdAt;
   String? updatedAt;
+  String? fullName;
+  String? designation;
+  String? workExperience;
+  String? email;
+  String? mobileNo;
+  String? profilePicture;
+  String? fcmToken;
+  int? likedUser;
   int? feedLikes;
   int? feedComments;
 
@@ -46,6 +54,14 @@ class FeedsDatum {
       this.userId,
       this.createdAt,
       this.updatedAt,
+      this.fullName,
+      this.designation,
+      this.workExperience,
+      this.email,
+      this.mobileNo,
+      this.profilePicture,
+      this.fcmToken,
+      this.likedUser,
       this.feedLikes,
       this.feedComments});
 
@@ -57,6 +73,14 @@ class FeedsDatum {
     userId = json['user_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    fullName = json['full_name'];
+    designation = json['designation'];
+    workExperience = json['work_experience'];
+    email = json['email'];
+    mobileNo = json['mobile_no'];
+    profilePicture = json['profile_picture'];
+    fcmToken = json['fcm_token'];
+    likedUser = json['liked_user'];
     feedLikes = json['feed_likes'];
     feedComments = json['feed_comments'];
   }
@@ -70,6 +94,14 @@ class FeedsDatum {
     data['user_id'] = this.userId;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['full_name'] = this.fullName;
+    data['designation'] = this.designation;
+    data['work_experience'] = this.workExperience;
+    data['email'] = this.email;
+    data['mobile_no'] = this.mobileNo;
+    data['profile_picture'] = this.profilePicture;
+    data['fcm_token'] = this.fcmToken;
+    data['liked_user'] = this.likedUser;
     data['feed_likes'] = this.feedLikes;
     data['feed_comments'] = this.feedComments;
     return data;
