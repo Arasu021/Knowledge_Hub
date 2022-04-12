@@ -37,6 +37,16 @@ part 'ApiService.g.dart';
 
 // Run this code in termial to generate ApiService.g.dart file
 //flutter packages pub run build_runner watch --delete-conflicting-outputs
+// certificatecheck() {
+//   (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+//       (HttpClient client) {
+//     client.badCertificateCallback =
+//         (X509Certificate cert, String host, int port) => true;
+//     return client;
+//   };
+// }
+
+//   certificatecheck();
 
 // certificatecheck() {
 //   (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
