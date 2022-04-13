@@ -1,10 +1,10 @@
-class PostFeedRes {
+class CommonQuesRes {
   bool? status;
   String? message;
 
-  PostFeedRes({this.status, this.message});
+  CommonQuesRes({this.status, this.message});
 
-  PostFeedRes.fromJson(Map<String, dynamic> json) {
+  CommonQuesRes.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
   }

@@ -30,6 +30,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   List<ProfileData>? myprofile;
 
   late File imageFile;
+  String dropdownValue = 'Select Your Designation';
   XFile? image;
   final ImagePicker _picker = ImagePicker();
   String img64 = "";
@@ -356,9 +357,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                                     onFieldSubmitted: (value) {
                                       //Validator
                                     },
-                                    onChanged: (value) {
-                                      _formKey.currentState!.reset();
-                                    },
+                                    // onChanged: (value) {
+                                    //   _formKey.currentState!.reset();
+                                    // },
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Enter your name';
@@ -405,64 +406,120 @@ class _ProfileEditState extends State<ProfileEdit> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: media.width * 1,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 0, 20, 4),
-                                  child: TextFormField(
-                                    autofocus: false,
-                                    onFieldSubmitted: (value) {
-                                      //Validator
-                                    },
-                                    onChanged: (value) {
-                                      _formKey.currentState!.reset();
-                                    },
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Enter your designation';
-                                      }
-                                      return null;
-                                    },
-                                    controller: designationController,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      //labelText: 'Username',
-                                      //labelStyle: TextStyle(
-                                      //color: Colors.black54,),
-                                      // errorText: _validate ? 'Value Can\'t Be Empty' : null,
+                              // SizedBox(
+                              //   width: media.width * 1,
+                              //   child: Padding(
+                              //     padding:
+                              //         const EdgeInsets.fromLTRB(20, 0, 20, 4),
+                              //     child: TextFormField(
+                              //       autofocus: false,
+                              //       onFieldSubmitted: (value) {
+                              //         //Validator
+                              //       },
+                              //       // onChanged: (value) {
+                              //       //   _formKey.currentState!.reset();
+                              //       // },
+                              //       validator: (value) {
+                              //         if (value == null || value.isEmpty) {
+                              //           return 'Enter your designation';
+                              //         }
+                              //         return null;
+                              //       },
+                              //       controller: designationController,
+                              //       decoration: InputDecoration(
+                              //         filled: true,
+                              //         fillColor: Colors.white,
+                              //         //labelText: 'Username',
+                              //         //labelStyle: TextStyle(
+                              //         //color: Colors.black54,),
+                              //         // errorText: _validate ? 'Value Can\'t Be Empty' : null,
 
-                                      errorStyle: const TextStyle(
-                                        color: Colors.red,
-                                      ),
-                                      hintText: 'Designation',
-                                      hintStyle: const TextStyle(
-                                        color: Colors.black54,
-                                      ),
-                                      prefixIcon: const Icon(
-                                        Icons.work_outline_outlined,
-                                        color: Colors.black54,
-                                      ),
-                                      contentPadding: const EdgeInsets.only(
-                                          left: 14.0, bottom: 20.0, top: 20.0),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.grey.shade300,
-                                            width: 5),
-                                        borderRadius: BorderRadius.circular(5),
+                              //         errorStyle: const TextStyle(
+                              //           color: Colors.red,
+                              //         ),
+                              //         hintText: 'Designation',
+                              //         hintStyle: const TextStyle(
+                              //           color: Colors.black54,
+                              //         ),
+                              //         prefixIcon: const Icon(
+                              //           Icons.work_outline_outlined,
+                              //           color: Colors.black54,
+                              //         ),
+                              //         contentPadding: const EdgeInsets.only(
+                              //             left: 14.0, bottom: 20.0, top: 20.0),
+                              //         focusedBorder: OutlineInputBorder(
+                              //           borderSide: BorderSide(
+                              //               color: Colors.grey.shade300),
+                              //           borderRadius: BorderRadius.circular(5),
+                              //         ),
+                              //         enabledBorder: UnderlineInputBorder(
+                              //           borderSide: BorderSide(
+                              //               color: Colors.grey.shade300,
+                              //               width: 5),
+                              //           borderRadius: BorderRadius.circular(5),
+                              //         ),
+                              //       ),
+                              //       //           validator: (value) =>
+                              //       // value!.isEmpty ? 'Email cannot be blank' : null,
+                              //       keyboardType: TextInputType.emailAddress,
+                              //     ),
+                              //   ),
+                              // ),
+                              DropdownButton<String>(
+                                dropdownColor:
+                                    Color.fromARGB(255, 228, 207, 199),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: Colors.black54,
+                                ),
+                                value: dropdownValue,
+                                style: const TextStyle(
+                                    color: Colors.black54,
+                                    decorationColor: Colors.white),
+                                underline: Container(
+                                  padding:
+                                      const EdgeInsets.only(left: 4, right: 4),
+                                  color: Colors.transparent,
+                                ),
+                                onChanged: (String? newValue) {
+                                  print("newValue:$newValue");
+                                  setState(() {
+                                    // if (newValue == 'Customer') {
+                                    //   setState(() {
+                                    //     dropdownValue = 'Customer';
+                                    //   });
+                                    // } else if (newValue == 'Driver') {
+                                    //   setState(() {
+                                    //     dropdownValue = 'Driver';
+                                    //   });
+                                    // }
+                                  });
+                                },
+                                items: <String>[
+                                  'Select Your Designation',
+                                  'Director',
+                                  'MEAN Stack Developer',
+                                  'MEAN Stack Developer',
+                                  'LAMP Stack Developer' 'UI & UX Developer',
+                                  'Designer',
+                                  'Flutter Develoer',
+                                  'IOS Developer'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        value,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black54,
+                                        ),
                                       ),
                                     ),
-                                    //           validator: (value) =>
-                                    // value!.isEmpty ? 'Email cannot be blank' : null,
-                                    keyboardType: TextInputType.emailAddress,
-                                  ),
-                                ),
+                                  );
+                                }).toList(),
                               ),
                               SizedBox(
                                 width: media.width * 1,
@@ -474,9 +531,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                                     onFieldSubmitted: (value) {
                                       //Validator
                                     },
-                                    onChanged: (value) {
-                                      _formKey.currentState!.reset();
-                                    },
+                                    // onChanged: (value) {
+                                    //   _formKey.currentState!.reset();
+                                    // },
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Enter your Work experience';
@@ -533,9 +590,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                                     onFieldSubmitted: (value) {
                                       //Validator
                                     },
-                                    onChanged: (value) {
-                                      _formKey.currentState!.reset();
-                                    },
+                                    // onChanged: (value) {
+                                    //   _formKey.currentState!.reset();
+                                    // },
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Enter your interests';

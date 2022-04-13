@@ -1,11 +1,53 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skein_community/Screens/OnBoardingScreen.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
+}
+
+String? devToken;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  _firebaseMessaging.getToken().then((String? token) {
+    //assert(token != null);
+
+    print("token: $token");
+    devToken = token!;
+  });
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print("message recieved inside geter");
+    print(message.notification?.body);
+    if (message.notification!.body!.contains("Success")) {
+      print("Move to another page");
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => SuccessPage()),
+      // );
+    } else if (message.notification!.body!.contains("Failed")) {
+      print("In else $message.notification?.body");
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => FailurePage()),
+      // );
+    }
+  });
+
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
+
+  // NotificationSettings settings = await _firebaseMessaging.requestPermission(
+  //   alert: true,
+  //   announcement: false,
+  //   badge: true,
+  //   provisional: true,
+  //   sound: true,
+  // );
   runApp(const MyApp());
 }
 

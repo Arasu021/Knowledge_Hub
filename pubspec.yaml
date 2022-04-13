@@ -56,7 +56,8 @@ dependencies:
   flutter_chips_input:
     git: https://github.com/jozes/flutter_chips_input.git
   image_picker: ^0.8.4+11
-  socket_io_client: ^1.0.2
+  socket_io_client: ^2.0.0-beta.4-nullsafety.0
+  firebase_messaging: ^11.2.10
   animations: ^2.0.2
 
 dev_dependencies:

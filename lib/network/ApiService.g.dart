@@ -138,14 +138,14 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<PostFeedRes> postFeed(body) async {
+  Future<CommonFeedRes> postFeed(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostFeedRes>(Options(
+        _setStreamType<CommonFeedRes>(Options(
                 method: 'POST',
                 headers: _headers,
                 extra: _extra,
@@ -153,19 +153,19 @@ class _ApiService implements ApiService {
             .compose(_dio.options, 'feeds/addfeed',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostFeedRes.fromJson(_result.data!);
+    final value = CommonFeedRes.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<PostFeedRes> postFeed2(body) async {
+  Future<CommonFeedRes> postFeed2(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostFeedRes>(Options(
+        _setStreamType<CommonFeedRes>(Options(
                 method: 'POST',
                 headers: _headers,
                 extra: _extra,
@@ -173,58 +173,58 @@ class _ApiService implements ApiService {
             .compose(_dio.options, 'feeds/addfeed',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostFeedRes.fromJson(_result.data!);
+    final value = CommonFeedRes.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<UpdateFeedRes> UpdateFeed(body) async {
+  Future<CommonFeedRes> UpdateFeed(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<UpdateFeedRes>(
+        _setStreamType<CommonFeedRes>(
             Options(method: 'PUT', headers: _headers, extra: _extra)
                 .compose(_dio.options, 'feeds/updatefeed?feed_id={feed_id}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = UpdateFeedRes.fromJson(_result.data!);
+    final value = CommonFeedRes.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<UpdateFeedRes> UpdateFeed2(body) async {
+  Future<CommonFeedRes> UpdateFeed2(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<UpdateFeedRes>(
+        _setStreamType<CommonFeedRes>(
             Options(method: 'PUT', headers: _headers, extra: _extra)
                 .compose(_dio.options, 'feeds/updatefeed?feed_id={feed_id}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = UpdateFeedRes.fromJson(_result.data!);
+    final value = CommonFeedRes.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<PostFeedRes> AddFeedLike(body) async {
+  Future<CommonFeedRes> AddFeedLike(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostFeedRes>(
+        _setStreamType<CommonFeedRes>(
             Options(method: 'POST', headers: _headers, extra: _extra)
                 .compose(_dio.options, 'feeds/addfeedlike',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostFeedRes.fromJson(_result.data!);
+    final value = CommonFeedRes.fromJson(_result.data!);
     return value;
   }
 
@@ -245,19 +245,19 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<PostFeedRes> RemoveFeedLike(feed_id, user_id) async {
+  Future<CommonFeedRes> RemoveFeedLike(feed_id, user_id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostFeedRes>(Options(
+        _setStreamType<CommonFeedRes>(Options(
                 method: 'DELETE', headers: _headers, extra: _extra)
             .compose(_dio.options,
                 'feeds/deletefeedlike?feed_id=${feed_id}&&user_id=${user_id}',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostFeedRes.fromJson(_result.data!);
+    final value = CommonFeedRes.fromJson(_result.data!);
     return value;
   }
 
@@ -278,36 +278,36 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<PostFeedCommentRes> postFeedComment(body) async {
+  Future<CommonFeedRes> postFeedComment(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostFeedCommentRes>(
+        _setStreamType<CommonFeedRes>(
             Options(method: 'POST', headers: _headers, extra: _extra)
                 .compose(_dio.options, 'comments/addcomments',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostFeedCommentRes.fromJson(_result.data!);
+    final value = CommonFeedRes.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<PostFeedRes> RemoveFeedComment(feed_comment_id) async {
+  Future<CommonFeedRes> RemoveFeedComment(feed_comment_id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostFeedRes>(Options(
+        _setStreamType<CommonFeedRes>(Options(
                 method: 'DELETE', headers: _headers, extra: _extra)
             .compose(_dio.options,
                 'comments/deletecomments?feed_comment_id=${feed_comment_id}',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostFeedRes.fromJson(_result.data!);
+    final value = CommonFeedRes.fromJson(_result.data!);
     return value;
   }
 
@@ -346,14 +346,14 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<PostFeedRes> postQuest(body) async {
+  Future<CommonQuesRes> postQuest(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostFeedRes>(Options(
+        _setStreamType<CommonQuesRes>(Options(
                 method: 'POST',
                 headers: _headers,
                 extra: _extra,
@@ -361,19 +361,19 @@ class _ApiService implements ApiService {
             .compose(_dio.options, 'questions/addquestion',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostFeedRes.fromJson(_result.data!);
+    final value = CommonQuesRes.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<PostFeedRes> postQuest2(body) async {
+  Future<CommonQuesRes> postQuest2(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostFeedRes>(Options(
+        _setStreamType<CommonQuesRes>(Options(
                 method: 'POST',
                 headers: _headers,
                 extra: _extra,
@@ -381,74 +381,92 @@ class _ApiService implements ApiService {
             .compose(_dio.options, 'questions/addquestion',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostFeedRes.fromJson(_result.data!);
+    final value = CommonQuesRes.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<UpdateFeedRes> UpdateQuest(body) async {
+  Future<CommonQuesRes> UpdateQuest(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<UpdateFeedRes>(
+        _setStreamType<CommonQuesRes>(
             Options(method: 'PUT', headers: _headers, extra: _extra)
                 .compose(_dio.options, 'feeds/updatefeed?feed_id={feed_id}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = UpdateFeedRes.fromJson(_result.data!);
+    final value = CommonQuesRes.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<UpdateFeedRes> UpdateQuest2(body) async {
+  Future<CommonQuesRes> UpdateQuest2(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<UpdateFeedRes>(
+        _setStreamType<CommonQuesRes>(
             Options(method: 'PUT', headers: _headers, extra: _extra)
                 .compose(_dio.options, 'feeds/updatefeed?feed_id={feed_id}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = UpdateFeedRes.fromJson(_result.data!);
+    final value = CommonQuesRes.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<PostFeedRes> AddQuestLike(body) async {
+  Future<CommonQuesRes> AddQuestLike(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostFeedRes>(
+        _setStreamType<CommonQuesRes>(
             Options(method: 'POST', headers: _headers, extra: _extra)
-                .compose(_dio.options, 'feeds/addfeedlike',
+                .compose(_dio.options, 'questions/addquestionlike',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostFeedRes.fromJson(_result.data!);
+    final value = CommonQuesRes.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<PostFeedRes> RemoveQuestLike() async {
+  Future<CommonQuesRes> RemoveQuestLike(questions_id, click_user_id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(_setStreamType<
+        CommonQuesRes>(Options(
+            method: 'DELETE', headers: _headers, extra: _extra)
+        .compose(_dio.options,
+            'questions/deletequestionlike?question_id=${questions_id}&&click_user_id=${click_user_id}',
+            queryParameters: queryParameters, data: _data)
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CommonQuesRes.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<GetQuesLikedRes> getQuesLike(question_id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostFeedRes>(
-            Options(method: 'DELETE', headers: _headers, extra: _extra)
-                .compose(_dio.options, 'feeds/deletefeedlike?feed_like_id=3',
+        _setStreamType<GetQuesLikedRes>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options,
+                    'questions/getQuestionLike?question_id=${question_id}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostFeedRes.fromJson(_result.data!);
+    final value = GetQuesLikedRes.fromJson(_result.data!);
     return value;
   }
 
@@ -461,8 +479,7 @@ class _ApiService implements ApiService {
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<getFeedCommentRes>(
             Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(
-                    _dio.options, '/comments/getcomment?feed_id=${feed_id}',
+                .compose(_dio.options, 'comments/getcomment?feed_id=${feed_id}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = getFeedCommentRes.fromJson(_result.data!);
@@ -470,19 +487,19 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<PostFeedCommentRes> postReplyQuesComment(body) async {
+  Future<CommonQuesRes> postReplyQuesComment(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostFeedCommentRes>(
+        _setStreamType<CommonQuesRes>(
             Options(method: 'POST', headers: _headers, extra: _extra)
                 .compose(_dio.options, 'comments/addcomments',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostFeedCommentRes.fromJson(_result.data!);
+    final value = CommonQuesRes.fromJson(_result.data!);
     return value;
   }
 
@@ -504,19 +521,19 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<PostFeedCommentRes> postQuesAnswer(body) async {
+  Future<CommonQuesRes> postQuesAnswer(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostFeedCommentRes>(
+        _setStreamType<CommonQuesRes>(
             Options(method: 'POST', headers: _headers, extra: _extra)
                 .compose(_dio.options, 'comments/addanswer',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostFeedCommentRes.fromJson(_result.data!);
+    final value = CommonQuesRes.fromJson(_result.data!);
     return value;
   }
 

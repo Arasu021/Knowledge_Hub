@@ -1,10 +1,10 @@
-class UpdateFeedRes {
+class CommonFeedRes {
   bool? status;
   String? message;
 
-  UpdateFeedRes({this.status, this.message});
+  CommonFeedRes({this.status, this.message});
 
-  UpdateFeedRes.fromJson(Map<String, dynamic> json) {
+  CommonFeedRes.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
   }

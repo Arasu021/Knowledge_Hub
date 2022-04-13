@@ -1,17 +1,17 @@
-class GetQuesRes {
+class GetQuesLikedRes {
   bool? status;
   String? message;
-  List<GetQuesData>? data;
+  List<GetQuesLikeData>? data;
 
-  GetQuesRes({this.status, this.message, this.data});
+  GetQuesLikedRes({this.status, this.message, this.data});
 
-  GetQuesRes.fromJson(Map<String, dynamic> json) {
+  GetQuesLikedRes.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <GetQuesData>[];
+      data = <GetQuesLikeData>[];
       json['data'].forEach((v) {
-        data!.add(new GetQuesData.fromJson(v));
+        data!.add(new GetQuesLikeData.fromJson(v));
       });
     }
   }
@@ -27,87 +27,71 @@ class GetQuesRes {
   }
 }
 
-class GetQuesData {
-  int? questionId;
-  String? questionSummary;
-  String? questionImage;
-  String? interests;
+class GetQuesLikeData {
+  int? questionsLikeId;
   int? userId;
-  int? questionViews;
+  int? questionsId;
+  int? clickUserId;
   String? createdAt;
   String? updatedAt;
   String? fullName;
   String? designation;
   String? workExperience;
+  String? interests;
   String? email;
   String? mobileNo;
   String? profilePicture;
   String? fcmToken;
-  int? questionLikes;
-  int? questionComments;
-  int? likedUser;
 
-  GetQuesData(
-      {this.questionId,
-      this.questionSummary,
-      this.questionImage,
-      this.interests,
+  GetQuesLikeData(
+      {this.questionsLikeId,
       this.userId,
-      this.questionViews,
+      this.questionsId,
+      this.clickUserId,
       this.createdAt,
       this.updatedAt,
       this.fullName,
       this.designation,
       this.workExperience,
+      this.interests,
       this.email,
       this.mobileNo,
       this.profilePicture,
-      this.fcmToken,
-      this.questionLikes,
-      this.questionComments,
-      this.likedUser});
+      this.fcmToken});
 
-  GetQuesData.fromJson(Map<String, dynamic> json) {
-    questionId = json['question_id'];
-    questionSummary = json['question_summary'];
-    questionImage = json['question_image'];
-    interests = json['interests'];
+  GetQuesLikeData.fromJson(Map<String, dynamic> json) {
+    questionsLikeId = json['questions_like_id'];
     userId = json['user_id'];
-    questionViews = json['question_views'];
+    questionsId = json['questions_id'];
+    clickUserId = json['click_user_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     fullName = json['full_name'];
     designation = json['designation'];
     workExperience = json['work_experience'];
+    interests = json['interests'];
     email = json['email'];
     mobileNo = json['mobile_no'];
     profilePicture = json['profile_picture'];
     fcmToken = json['fcm_token'];
-    questionLikes = json['question_likes'];
-    questionComments = json['question_comments'];
-    likedUser = json['liked_user'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['question_id'] = this.questionId;
-    data['question_summary'] = this.questionSummary;
-    data['question_image'] = this.questionImage;
-    data['interests'] = this.interests;
+    data['questions_like_id'] = this.questionsLikeId;
     data['user_id'] = this.userId;
-    data['question_views'] = this.questionViews;
+    data['questions_id'] = this.questionsId;
+    data['click_user_id'] = this.clickUserId;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['full_name'] = this.fullName;
     data['designation'] = this.designation;
     data['work_experience'] = this.workExperience;
+    data['interests'] = this.interests;
     data['email'] = this.email;
     data['mobile_no'] = this.mobileNo;
     data['profile_picture'] = this.profilePicture;
     data['fcm_token'] = this.fcmToken;
-    data['question_likes'] = this.questionLikes;
-    data['question_comments'] = this.questionComments;
-    data['liked_user'] = this.likedUser;
     return data;
   }
 }

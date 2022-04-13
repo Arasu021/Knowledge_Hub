@@ -6,12 +6,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skein_community/Models/Feeds/FeedLikeReq.dart';
 import 'package:skein_community/Models/Feeds/getFeedCommentRes.dart';
 import 'package:skein_community/Models/Questions/GetQuesAnswerRes.dart';
+import 'package:skein_community/Models/Questions/GetQuesLikedRes.dart';
 import 'package:skein_community/Models/Questions/GetQuesRes.dart';
+import 'package:skein_community/Models/Questions/PostQuesLikeReq.dart';
 import 'package:skein_community/Screens/AnswerPage.dart';
 import 'package:skein_community/Utilities/strings.dart';
 import 'package:skein_community/Widgets/Comments_screen.dart';
 import 'package:skein_community/Widgets/Likes_Screen.dart';
 import 'package:skein_community/Widgets/Views_Screen.dart';
+import 'package:skein_community/functions/functions.dart';
 import 'package:skein_community/network/ApiService.dart';
 
 class QuesPage extends StatefulWidget {
@@ -34,6 +37,8 @@ class _QuesPageState extends State<QuesPage> {
   List<QuesAnsData>? QuesAnswerData;
 
   late List<GetQuesData> getQuestId;
+
+  List<GetQuesLikeData>? QuesLikesData;
 
   // List<GetFeedComData>? FeedsCommentData;
 
@@ -94,6 +99,41 @@ class _QuesPageState extends State<QuesPage> {
                   builder: (context) =>
                       AnswerPage(getQuestId, QuesAnswerData)));
         }
+      });
+    }).catchError((onError) {
+      print(onError.toString());
+    });
+  }
+
+  _unLike(Qid, QUid) {
+    // _isLoading = true;
+    final api = Provider.of<ApiService>(ctx!, listen: false);
+    api.RemoveQuestLike(Qid, QUid).then((response) {
+      // print("response ${response.status}");
+      setState(() {
+        //  _isLoading = false;
+        if (response.status == true) {
+          getQuestions();
+        } else {
+          functions.createSnackBar(context, response.message.toString());
+          print("error");
+        }
+      });
+    }).catchError((onError) {
+      print(onError.toString());
+    });
+  }
+
+  getQuesLike(Qid) {
+    // functions.showprogress();
+    final api = Provider.of<ApiService>(ctx!, listen: false);
+    api.getQuesLike(Qid).then((response) {
+      // print("response ${response.status}");
+      setState(() {
+        _isLoading = false;
+        QuesLikesData = response.data!;
+        // openBottomSheet();
+        Get.to(() => QuesLikeScreen(QuesLikesData));
       });
     }).catchError((onError) {
       print(onError.toString());
@@ -177,68 +217,72 @@ class _QuesPageState extends State<QuesPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             InkWell(
-                                        highlightColor: Colors.transparent,
-                                        splashColor: Colors.transparent,
-                                        onHighlightChanged: (value) {
-                                          setState(() {
-                                            isHighlighted = !isHighlighted;
-                                          });
-                                        },
-                                        onTap: () {
-                                          setState(() {
-                                            // if (QuesData![index].questionLikes ==
-                                            //     Strings.myprofile![0].userId) {
-                                            // } else {
-                                              // _addQuesLike(
-                                              //     QuesData![index].questionId,
-                                              //     QuesData![index].userId);
-                                          //   }
-                                           });
-                                        },
-                                        child: AnimatedContainer(
-                                          margin: EdgeInsets.all(
-                                              isHighlighted ? 0 : 2.5),
-                                          height: isHighlighted ? 30 : 25,
-                                          width: isHighlighted ? 30 : 25,
-                                          curve: Curves.fastLinearToSlowEaseIn,
-                                          duration: Duration(milliseconds: 300),
-                                          decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                                blurRadius: 20,
-                                                offset: Offset(5, 10),
-                                              ),
-                                            ],
-                                            color: Colors.white,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child:
-                                          //  (QuesData![index].likedUser !=
-                                          //         Strings.myprofile![0].userId)
-                                          //     ? 
-                                              Icon(
-                                                  Icons.thumb_up_alt_outlined,
-                                                  color: Colors.black
-                                                      .withOpacity(0.6),
-                                                  size: 20,
-                                                )
-                                              // : Icon(
-                                              //     Icons.thumb_up,
-                                              //     color: Colors.pink
-                                              //         .withOpacity(1.0),
-                                              //     size: 20,
-                                              //   ),
-                                        ),
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              onHighlightChanged: (value) {
+                                setState(() {
+                                  isHighlighted = !isHighlighted;
+                                });
+                              },
+                              onTap: () {
+                                setState(() {
+                                  if (QuesData![index].likedUser ==
+                                      Strings.myprofile![0].userId) {
+                                    _unLike(QuesData![index].questionId,
+                                        QuesData![index].likedUser);
+                                  } else {
+                                    _addQuesLike(QuesData![index].questionId,
+                                        QuesData![index].userId);
+                                  }
+                                });
+                              },
+                              child: AnimatedContainer(
+                                margin: EdgeInsets.all(isHighlighted ? 0 : 2.5),
+                                height: isHighlighted ? 30 : 25,
+                                width: isHighlighted ? 30 : 25,
+                                curve: Curves.fastLinearToSlowEaseIn,
+                                duration: Duration(milliseconds: 300),
+                                // decoration: BoxDecoration(
+                                //   boxShadow: [
+                                //     BoxShadow(
+                                //       color: Colors.black
+                                //           .withOpacity(0.2),
+                                //       blurRadius: 20,
+                                //       offset: Offset(5, 10),
+                                //     ),
+                                //   ],
+                                //   color: Colors.white,
+                                //   shape: BoxShape.circle,
+                                // ),
+                                child: (QuesData![index].likedUser !=
+                                        Strings.myprofile![0].userId)
+                                    ? Icon(
+                                        Icons.thumb_up_alt_outlined,
+                                        color: Colors.grey.shade300,
+                                        size: 20,
+                                      )
+                                    : Icon(
+                                        Icons.thumb_up_alt,
+                                        color: Colors.red.withOpacity(1.0),
+                                        size: 20,
                                       ),
-                           
-                            Text(QuesData![index].questionLikes.toString(),
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.white)),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: (() {
+                                _isLoading = true;
+                                if (QuesData![index].questionLikes != 0) {
+                                  getQuesLike(QuesData![index].questionId);
+                                }
+                              }),
+                              child: Text(
+                                  QuesData![index].questionLikes.toString(),
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.white)),
+                            ),
                             IconButton(
                                 onPressed: () {
-                                  Get.to(() => QuesLikeScreen());
+                                  // Get.to(() => QuesLikeScreen());
                                 },
                                 icon: Icon(
                                   Icons.question_answer_outlined,
@@ -248,7 +292,6 @@ class _QuesPageState extends State<QuesPage> {
                             Text(QuesData![index].questionComments.toString(),
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.white)),
-
                             IconButton(
                                 onPressed: () {
                                   Get.to(() => QuesViewScreen());
@@ -316,20 +359,38 @@ class _QuesPageState extends State<QuesPage> {
                                     leading: CircleAvatar(
                                       child: ClipOval(
                                         child: Center(
-                                          child: Image.network(
-                                            "https://picsum.photos/seed/picsum/200/300",
-                                            fit: BoxFit.cover,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                          ),
+                                          child: (QuesData![index]
+                                                          .profilePicture ==
+                                                      "" ||
+                                                  QuesData![index]
+                                                          .profilePicture ==
+                                                      null ||
+                                                  QuesData![index]
+                                                          .profilePicture ==
+                                                      "undefined")
+                                              ? Icon(
+                                                  Icons.person,
+                                                  color: Colors.grey.shade600,
+                                                  size: 30,
+                                                )
+                                              : Image.network(
+                                                  "https://demo.emeetify.com:3422/" +
+                                                      QuesData![index]
+                                                          .profilePicture
+                                                          .toString(),
+                                                  fit: BoxFit.cover,
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                ),
                                         ),
                                       ),
                                       radius: 20,
                                       backgroundColor: Colors.grey.shade300,
                                     ),
-                                    title: Text("Arasuewaran R"),
-                                    subtitle: Text("flutter developer"),
+                                    title: Text(QuesData![index].fullName!),
+                                    subtitle:
+                                        Text(QuesData![index].designation!),
                                     // trailing: SizedBox(
                                     //   width: 100,
                                     // )
@@ -350,20 +411,21 @@ class _QuesPageState extends State<QuesPage> {
             //),
             );
   }
-  //   void _addQuesLike(Qid, QUid) async {
-  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  //   QuesLikeReq feedLike = FeedLikeReq();
-  //   feedLike.userId = FUid;
-  //   feedLike.feedId = Fid;
-  //   feedLike.clickUserId = Strings.user_id;
-  //   final api = Provider.of<ApiService>(ctx!, listen: false);
-  //   api.AddFeedLike(feedLike).then((response) {
-  //     if (response.status == true) {
-  //       getFeeds();
-  //     } else {
-  //       functions.createSnackBar(context, response.message.toString());
-  //       print("error");
-  //     }
-  //   });
-  // }
+
+  void _addQuesLike(Qid, QUid) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    PostQuesLikeReq QuesLike = PostQuesLikeReq();
+    QuesLike.userId = QUid;
+    QuesLike.questionsId = Qid;
+    QuesLike.clickUserId = Strings.myprofile![0].userId!;
+    final api = Provider.of<ApiService>(ctx!, listen: false);
+    api.AddQuestLike(QuesLike).then((response) {
+      if (response.status == true) {
+        getQuestions();
+      } else {
+        functions.createSnackBar(context, response.message.toString());
+        print("error");
+      }
+    });
+  }
 }

@@ -51,6 +51,10 @@ class _FeedsPageState extends State<FeedsPage> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Strings.authToken = sharedPreferences.getString("token")!;
     Strings.user_id = sharedPreferences.getInt("user_id")!;
+    //print("hii" + Strings.myprofile![0].interests!);
+    // List<String> slist = Strings.myprofile![0].interests! as List<String>;
+    // String mystr = slist.join();
+    // print("iiii" + mystr);
     final api = Provider.of<ApiService>(ctx!, listen: false);
     //Strings.myprofile![0].interests!
     api.getFeed("Skenians", page).then((response) {
@@ -206,7 +210,7 @@ class _FeedsPageState extends State<FeedsPage> {
                 onNotification: (ScrollNotification scrollInfo) {
                   if (end == false) {
                     if (!_isLoading &&
-                        scrollInfo.metrics.pixels ==
+                        scrollInfo.metrics.extentBefore ==
                             scrollInfo.metrics.maxScrollExtent) {
                       // start loading data
                       setState(() {
@@ -376,7 +380,7 @@ class _FeedsPageState extends State<FeedsPage> {
                                                         .myprofile![0].userId) {
                                                   unLike(
                                                       FeedsData![index].feedId,
-                                                      FeedsData![index].userId);
+                                                      FeedsData![index].likedUser);
                                                 } else {
                                                   _addFeedLike(
                                                       FeedsData![index].feedId,
